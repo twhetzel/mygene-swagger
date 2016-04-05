@@ -1,0 +1,491 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "2.0.0"
+  title: MyGene.info API
+host: mygene.info
+schemes:
+  - http
+basePath: /v2
+produces:
+  - application/json
+# Describe your paths here
+paths:
+  /query:
+    get:
+      description: |
+        Make gene query and return matching gene list. Support JSONP and CORS as well.
+      # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is required
+        - name: q
+          in: query 
+          description: Query string. Examples "CDK2", "NM_052827", "204639_at". The detailed query syntax can be found at http://docs.mygene.info/en/latest/doc/query_service.html
+          required: true
+          type: string
+          format: string
+        - name: fields
+          in: query
+          description: A comma-separated field to limit the fields returned from the matching gene hits. The supported field names can be found from any gene object (e.g. http://mygene.info/v2/gene/1017). Note that it supports dot notation as well, e.g., you can pass "refseq.rna". If "fields=all", all available fields will be returned. Default "symbol,name,taxid,entrezgene,ensemblgene".
+          required: false
+          type: string
+          default: symbol,name,taxid,entrezgene,ensemblgene
+        - name: species
+          in: query
+          description: can be used to limit the gene hits from given species. You can use "common names" for nine common species (human, mouse, rat, fruitfly, nematode, zebrafish, thale-cress, frog and pig). All other species, you can provide their taxonomy ids. Multiple species can be passed using comma as a separator. Passing “all” will query against all available species. Default human,mouse,rat.
+          required: false
+          type: string
+        - name: size
+          in: query
+          description: the maximum number of matching gene hits to return (with a cap of 1000 at the moment). Default 10.
+          required: false
+          type: integer
+          default: 10
+        - name: from
+          in: query
+          description: the number of matching gene hits to skip, starting from 0. Combining with "size" parameter, this can be useful for paging. Default 0. 
+          required: false
+          type: integer
+          default: 0
+        - name: sort
+          in: query
+          description: comma-separated fields to sort on. Prefix with "-" for descending order, otherwise in ascending order. Sort by matching scores in decending order.
+          required: false
+          type: string
+        - name: facets
+          in: query
+          description: a single field or comma-separated fields to return facets, for example, “facets=taxid”, “facets=taxid,type_of_gene”.
+          required: false
+          type: string
+        - name: species_facet_filter
+          in: query
+          description: relevant when faceting on species (i.e., “facets=taxid” are passed). It’s used to pass species filter without changing the scope of faceting, so that the returned facet counts won’t change. Either species name or taxonomy id can be used, just like “species” parameter above.
+          required: false
+          type: string
+        - name: entrezonly
+          in: query
+          description: when passed as “true” or “1”, the query returns only the hits with valid Entrez gene ids. 
+          default: false
+          required: false
+          type: boolean
+        - name: ensemblonly
+          in: query
+          description: when passed as “true” or “1”, the query returns only the hits with valid Ensembl gene ids. 
+          default: false
+          required: false
+          type: boolean
+        - name: callback
+          in: query
+          description: you can pass a "callback" parameter to make a JSONP call.
+          required: false
+          type: string
+        - name: dotfield
+          in: query
+          description: control the format of the returned fields when passed "fields" parameter contains dot notation, e.g. "fields=refseq.rna". If "true" or "1", the returned data object contains a single "refseq.rna" field, otherwise ("false" or "0"), a single "refseq" field with a sub-field of "rna". 
+          default: true
+          type: boolean
+        - name: filter
+          in: query
+          description: alias for "fields" parameter.
+          type: string
+        - name: limit
+          in: query
+          description: alias for "size" parameter.
+          type: integer
+        - name: skip
+          in: query
+          description: alias for "from" parameter.
+          type: integer
+        - name: email
+          in: query
+          description: If you are regular users of our services, we encourage you to provide us an email, so that we can better track the usage or follow up with you.
+          type: string
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            type: array
+            items:
+              title: Hits
+              type: object
+              properties:
+                name:
+                  type: string
+                entrezgene:
+                  type: integer
+                taxid: 
+                  type: integer
+                _id:
+                  type: integer
+                symbol:
+                  type: string
+    post:
+      description: |
+        Make gene queries in batch.
+      parameters:
+        - name: q
+          in: query
+          description: multiple query terms seperated by comma (also support "+" or white space), but no wildcard, e.g., "q=1017,1018" or "q=CDK2+BTK" 
+          required: true
+          type: string
+        - name: scopes
+          in: query
+          description: specify one or more fields (separated by comma) as the search "scopes", e.g., "scopes=entrezgene", "scopes=entrezgene,ensemblgene". The available "fields" can be passed to "scopes" parameter are listed at http://mygene.info/doc/query_service.html#available-fields. Default "scopes=entrezgene,ensemblgene,retired" (either Entrez or Ensembl gene ids).
+          required: false
+          type: string
+        - name: fields
+          in: query
+          description: a comma-separated fields to limit the fields returned from the matching gene hits. The supported field names can be found from any gene object (e.g. http://mygene.info/v2/gene/1017). Note that it supports dot notation as well, e.g., you can pass "refseq.rna". If "fields=all", all available fields will be returned. Default "symbol,name,taxid,entrezgene,ensemblgene".
+          required: false
+          type: string
+        - name: species
+          in: query
+          description: can be used to limit the gene hits from given species. You can use "common names" for nine common species (human, mouse, rat, fruitfly, nematode, zebrafish, thale-cress, frog and pig). All other species, you can provide their taxonomy ids. Multiple species can be passed using comma as a separator. Default human,mouse,rat.
+          required: false
+          type: string
+        - name: dotfield
+          in: query
+          description: control the format of the returned fields when passed "fields" parameter contains dot notation, e.g. "fields=refseq.rna". If "true" or "1", the returned data object contains a single "refseq.rna" field, otherwise ("false" or "0"), a single "refseq" field with a sub-field of "rna". Default true.
+          required: false
+          type: string
+        - name: email
+          in: query
+          description: If you are regular users of our services, we encourage you to provide us an email, so that we can better track the usage or follow up with you.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                query:
+                  type: string
+                entrezgene:
+                  type: integer
+                taxid: 
+                  type: integer
+                _id:
+                  type: integer
+                symbol:
+                  type: string
+  /query2:
+    get:
+      description: |
+        Make gene query by genome interval and return genes within that region. Support JSONP and CORS as well.
+      parameters:
+        - name: q
+          in: query
+          description: genome interval in format of "chr#:start-end", e.g., chr1:151,073,054-151,383,976 (comma allowed). For human genes, the interval query is against hg38 by default, but you can still use hg19.chr1:151,073,054-151,383,976 to query against hg19 genome assembly 
+          required: true
+          type: string
+        - name: fields
+          in: query
+          description: a comma-separated fields to limit the fields returned from the matching gene hits. The supported field names can be found from any gene object (e.g. http://mygene.info/v2/gene/1017). Note that it supports dot notation as well, e.g., you can pass "refseq.rna". If "fields=all", all available fields will be returned. Default "symbol,name,taxid,entrezgene,ensemblgene".
+          required: false
+          type: string
+        - name: species
+          in: query
+          description: Optional, do the genome interval query for the given species. You can use "common names" for nine common species (human, mouse, rat, fruitfly, nematode, zebrafish, thale-cress, frog and pig). Any other species, you can provide its taxonomy id. Default human.
+          required: false
+          type: integer
+        - name: size
+          in: query
+          description: the maximum number of matching gene hits to return (with a cap of 1000 at the moment). Default 10.
+          required: false
+          type: string
+        - name: from
+          in: query
+          description: the number of matching gene hits to skip, starting from 0. Combining with "size" parameter, this can be useful for paging. Default 0.
+          required: false
+          type: integer
+        - name: sort
+          in: query
+          description: he comma-separated fields to sort on. Prefix with "-" for descending order, otherwise in ascending order. Default sort by matching scores in decending order.
+          required: false
+          type: string
+        - name: entrezonly
+          in: query
+          description: when passed as “true” or “1”, the query returns only the hits with valid Entrez gene ids. 
+          default: false
+          required: false
+          type: boolean
+        - name: ensemblonly
+          in: query
+          description: when passed as “true” or “1”, the query returns only the hits with valid Ensembl gene ids. 
+          default: false
+          required: false
+          type: boolean
+        - name: callback
+          in: query
+          description: you can pass a "callback" parameter to make a JSONP call.
+          required: false
+          type: string
+        - name: dotfield
+          in: query
+          description: control the format of the returned fields when passed "fields" parameter contains dot notation, e.g. "fields=refseq.rna". If "true" or "1", the returned data object contains a single "refseq.rna" field, otherwise ("false" or "0"), a single "refseq" field with a sub-field of "rna". 
+          default: true
+          required: false
+          type: boolean
+        - name: filter
+          in: query
+          description: alias for "fields" parameter.
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: alias for "size" parameter.
+          required: false
+          type: integer
+        - name: skip
+          in: query
+          description: alias for "from" parameter.
+          required: false
+          type: integer
+        - name: email
+          in: query
+          description: If you are regular users of our services, we encourage you to provide us an email, so that we can better track the usage or follow up with you.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                query:
+                  type: string
+                entrezgene:
+                  type: integer
+                taxid: 
+                  type: integer
+                _id:
+                  type: integer
+                symbol:
+                  type: string
+  /gene/{geneid}:
+    get:
+      description: | 
+        Retrieve gene annotation based on Entrez or Ensembl gene id, support JSONP and CORS as well.
+      parameters:
+        - name: geneid
+          in: path
+          description: Entrez or Ensembl gene id, e.g., 1017, ENSG00000170248. A retired Entrez Gene id works too if it is replaced by a new one, e.g., 245794
+          required: true
+          type: string
+        - name: fields
+          in: query
+          description: a comma-separated fields to limit the fields returned from the matching gene hits. The supported field names can be found from any gene object (e.g. http://mygene.info/v2/gene/1017). Note that it supports dot notation as well, e.g., you can pass "refseq.rna". If "fields=all", all available fields will be returned. Default "symbol,name,taxid,entrezgene,ensemblgene".
+          required: false
+          type: string
+        - name: callback
+          in: query
+          description: you can pass a "callback" parameter to make a JSONP call.
+          required: false
+          type: string
+        - name: filter
+          in: query
+          description: alias for "fields" parameter.
+          required: false
+          type: string
+        - name: dotfield
+          in: query
+          description: control the format of the returned fields when passed "fields" parameter contains dot notation, e.g. "fields=refseq.rna". If "true" or "1", the returned data object contains a single "refseq.rna" field, otherwise ("false" or "0"), a single "refseq" field with a sub-field of "rna". Default true.
+          required: false
+          type: string
+        - name: email
+          in: query
+          description: 	If you are regular users of our services, we encourage you to provide us an email, so that we can better track the usage or follow up with you.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            items:
+              type: object
+              properties:
+                _id:
+                  type: string
+                accession:
+                  type: object
+                  properties:
+                    genomic:
+                      type: array
+                    rna:
+                      type: array
+                    protein:
+                      type: array
+                alias:
+                  type: array
+                ec: 
+                  type: string
+                ensembl:
+                  type: object
+                entrezgene:
+                  type: string
+                exons:
+                  type: object
+                generif:
+                  type: array
+                genomic_pos:
+                  type: object
+                genomic_pos_hg19:
+                  type: object
+                go:
+                  type: object
+                HGNC:
+                  type: string
+                homologene:
+                  type: object
+                HPRD:
+                  type: string
+                interpro:
+                  type: array
+                ipi:
+                  type: array
+                map_location:
+                  type: string
+                MIM:
+                  type: string
+                name:
+                  type: string
+                pathway:
+                  type: object
+                pdb:
+                  type: array
+                pfam:
+                  type: string
+                pharmgkb:
+                  type: string
+                pir:
+                  type: string
+                prosite:
+                  type: string
+                reagent:
+                  type: object
+                refseq:
+                  type: object
+                reporter:
+                  type: object
+                summary:
+                  type: string
+                symbol:
+                  type: string
+                taxid:
+                  type: integer
+                type_of_gene:
+                  type: string
+                unigene:
+                  type: array
+                uniprot:
+                  type: object
+                Vega:
+                  type: string
+                wikipedia:
+                  type: object
+  /gene:
+    post:
+      description: |
+        Make gene queries in batch for a list of Entrez or Ensembl gene ids.
+      parameters:
+        - name: ids
+          in: query
+          description: multiple geneids seperated by comma, e.g., "ids=1017,1018" or "ids=695,ENSG00000123374". Note that currently we only take the input ids up to 1000 maximum, the rest will be omitted.
+          required: true
+          type: string
+        - name: fields
+          in: query
+          description: a comma-separated fields to limit the fields returned from the matching gene hits. The supported field names can be found from any gene object (e.g. http://mygene.info/v2/gene/1017). Note that it supports dot notation as well, e.g., you can pass "refseq.rna". If "fields=all", all available fields will be returned. Default "symbol,name,taxid,entrezgene,ensemblgene".
+          required: false
+          type: string
+        - name: species
+          in: query
+          description: Optional, can be used to limit the gene hits from given species. You can use "common names" for nine common species (human, mouse, rat, fruitfly, nematode, zebrafish, thale-cress, frog and pig). All other species, you can provide their taxonomy ids. Multiple species can be passed using comma as a separator. Default all.
+          required: false
+          type: string
+        - name: dotfield
+          in: query
+          description: control the format of the returned fields when passed "fields" parameter contains dot notation, e.g. "fields=refseq.rna". If "true" or "1", the returned data object contains a single "refseq.rna" field, otherwise ("false" or "0"), a single "refseq" field with a sub-field of "rna". Default true.
+          required: false
+          type: string
+        - name: email
+          in: query
+          description: If you are regular users of our services, we encourage you to provide us an email, so that we can better track the usage or follow up with you.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                query:
+                  type: string
+                _id:
+                  type: string
+                entrezgene:
+                  type: integer
+                taxid: 
+                  type: integer
+                symbol:
+                  type: string
+  /metadata:
+    get:
+      description: |
+        Get metadata about the data available from MyGene.info.
+      parameters:
+        - name: callback
+          in: query
+          description: you can pass a "callback" parameter to make a JSONP call.
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: object
+            items:
+              type: object
+              properties:
+                app_revision:
+                  type: string
+                available_fields:
+                  type: string
+                genome_assembly:
+                  type: object
+                source:
+                  type: string
+                src_version:
+                  type: object
+                stats:
+                  type: object
+                taxonomy:
+                  type: object
+                timestamp:
+                  type: string
+
+                
+          
+                
