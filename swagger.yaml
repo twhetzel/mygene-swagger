@@ -19,6 +19,7 @@ paths:
     get:
       description: |
         Make gene query and return matching gene list. Support JSONP and CORS as well.
+      operationId: queryGene
       # This is array of GET operation parameters:
       parameters:
         # An example parameter that is in query and is required
@@ -130,6 +131,7 @@ paths:
     post:
       description: |
         Make gene queries in batch.
+      operationId: queryGenes
       parameters:
         - name: q
           in: query
@@ -185,6 +187,7 @@ paths:
     get:
       description: |
         Make gene query by genome interval and return genes within that region. Support JSONP and CORS as well.
+      operationId: queryByGenomeInterval
       parameters:
         - name: q
           in: query
@@ -283,6 +286,7 @@ paths:
     get:
       description: | 
         Retrieve gene annotation based on Entrez or Ensembl gene id, support JSONP and CORS as well.
+      operationId: getAnnotation 
       parameters:
         - name: geneid
           in: path
@@ -405,6 +409,7 @@ paths:
     post:
       description: |
         Make gene queries in batch for a list of Entrez or Ensembl gene ids.
+      operationId: getGenes
       parameters:
         - name: ids
           in: query
@@ -455,6 +460,7 @@ paths:
     get:
       description: |
         Get metadata about the data available from MyGene.info.
+      operationId: getMetadata
       parameters:
         - name: callback
           in: query
