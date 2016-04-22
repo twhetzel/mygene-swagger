@@ -106,8 +106,6 @@ paths:
           description: Successful response
           schema:
             type: object
-            required:
-              - q
             properties:
               hits:
                 type: array
@@ -229,88 +227,385 @@ paths:
           description: Successful response
           schema:
             type: object
-            items:
-              type: object
-              properties:
-                _id:
+            properties:
+              _id:
+                type: string
+              accession:
+                type: object
+                properties:
+                  rna:
+                    type: array
+                    items:
+                      type: string
+                  genomic:
+                    type: array
+                    items:
+                      type: string
+                  protein:
+                    type: array
+                    items:
+                      type: string
+              alias:
+                type: array
+                items:
                   type: string
-                accession:
+              ec:
+                type: string
+              ensembl:
+                type: object
+                properties:
+                  gene:
+                    type: string
+                  transcript:
+                    type: array
+                    items:
+                      type: string
+              entrezgene:
+                type: string
+              exons:
+                type: object
+              generif:
+                type: array
+                items:
                   type: object
                   properties:
-                    genomic:
+                    pubmed:
+                      type: string
+                    text:
+                      type: string
+              genomic_pos:
+                type: object
+                properties:
+                  strand:
+                    type: integer
+                  chr:
+                    type: integer
+                  start:
+                    type: integer
+                  end:
+                    type: integer
+              genomic_pos_hg19:
+                  type: object
+                  properties:
+                    strand:
+                      type: integer
+                    chr:
+                      type: integer
+                    start:
+                      type: integer
+                    end:
+                      type: integer
+              go:
+                  type: object
+                  properties:
+                    MF:
                       type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          evidence:
+                            type: string
+                          term:
+                            type: string
+                    BP:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          evidence:
+                            type: string
+                          term:
+                            type: string
+                    CC:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          evidence:
+                            type: string
+                          term:
+                            type: string
+              HGNC:
+                type: integer
+              homologene:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  genes:
+                    type: array
+                    items:
+                      type: integer
+              HPRD:
+                type: integer
+              interpro:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    short_desc:
+                      type: string
+                    description:
+                      type: string
+              ipi:
+                type: array
+                items:
+                  type: string
+              map_location:
+                type: string
+              MIM:
+                type: integer
+              name:
+                type: string
+              pathway:
+                type: object
+                properties:
+                  reactome:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                  pid:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                  wikipathways:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                  netpath:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                  biocarta:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                  kegg:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+              pdb:
+                type: array
+                items:
+                  type: string
+              pfam:
+                type: string
+              pharmgkb:
+                type: string
+              pir:
+                type: string
+              prosite:
+                type: string
+              reagent:
+                type: object
+                properties:
+                  NIBRI_hs-Secretome_pDEST:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      relationship:
+                        type: string
+                  GNF_hs_LentiORF-HA-MYC:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      relationship:
+                        type: string
+                  GNF_Qia_hs-genome_v1_siRNA:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        relationonship:
+                          type: string
+                  GNF_hs-druggable_plasmid-shRNA:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        relationonship:
+                          type: string
+                  GNF_mm+hs-MGC:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      relationonship:
+                        type: string
+                  Invitrogen_IVTHSSIPKv2:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        relationonship:
+                          type: string
+                  GNF_hs-druggable_lenti-shRNA:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        relationonship:
+                          type: string
+                  GNF_hs-druggable_siRNA:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        relationonship:
+                          type: string
+                  NOVART_hs-genome_siRNA:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        relationonship:
+                          type: string
+                  GNF_hs_LentiORF-Jred:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      relationonship:
+                        type: string
+                  GNF_hs-pkinase_IDT-siRNA:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        relationonship:
+                          type: string
+                  GNF_hs-ORFeome1_1_reads:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      relationonship:
+                        type: string
+                  GNF_hs-Origene:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        relationonship:
+                          type: string
+              refseq:
+                  type: object
+                  properties:
                     rna:
                       type: array
+                      items:
+                        type: string
+                    genomic:
+                      type: array
+                      items:
+                        type: string
                     protein:
                       type: array
-                alias:
-                  type: array
-                ec:
-                  type: string
-                ensembl:
+                      items:
+                        type: string
+              reporter:
                   type: object
-                entrezgene:
+                  properties:
+                    HTA-2_0:
+                      type: string
+                    HuGene-2_1:
+                      type: integer
+                    HuGene-1_1:
+                      type: integer
+                    HG-U133_Plus_2:
+                      type: array
+                      items:
+                        type: string
+                    HuEx-1_0:
+                      type: integer
+                    HG-U95Av2:
+                      type: array
+                      items:
+                        type: string
+              summary:
+                type: string
+              symbol:
+                type: string
+              taxid:
+                type: integer
+              type_of_gene:
+                type: string
+              unigene:
+                type: array
+                items:
                   type: string
-                exons:
-                  type: object
-                generif:
-                  type: array
-                genomic_pos:
-                  type: object
-                genomic_pos_hg19:
-                  type: object
-                go:
-                  type: object
-                HGNC:
-                  type: string
-                homologene:
-                  type: object
-                HPRD:
-                  type: string
-                interpro:
-                  type: array
-                ipi:
-                  type: array
-                map_location:
-                  type: string
-                MIM:
-                  type: string
-                name:
-                  type: string
-                pathway:
-                  type: object
-                pdb:
-                  type: array
-                pfam:
-                  type: string
-                pharmgkb:
-                  type: string
-                pir:
-                  type: string
-                prosite:
-                  type: string
-                reagent:
-                  type: object
-                refseq:
-                  type: object
-                reporter:
-                  type: object
-                summary:
-                  type: string
-                symbol:
-                  type: string
-                taxid:
-                  type: integer
-                type_of_gene:
-                  type: string
-                unigene:
-                  type: array
-                uniprot:
-                  type: object
-                Vega:
-                  type: string
-                wikipedia:
-                  type: object
+              uniprot:
+                type: object
+                properties:
+                  Swiss-Prot:
+                    type: string
+                  TrEMBL:
+                    type: array
+                    items:
+                      type: string
+              Vega:
+                type: string
+              wikipedia:
+                type: object
+                properties:
+                  url_stub:
+                    type: string
   /gene:
     post:
       tags: ["gene"]
