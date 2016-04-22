@@ -662,7 +662,7 @@ paths:
     get:
       tags: ["metadata"]
       description: |
-        Get metadata about the data available from MyGene.info.
+        Get metadata about the data available from MyGene.info
       operationId: getMetadata
       parameters:
         - name: callback
@@ -675,22 +675,86 @@ paths:
           description: Successful response
           schema:
             type: object
-            items:
-              type: object
-              properties:
-                app_revision:
-                  type: string
-                available_fields:
-                  type: string
-                genome_assembly:
-                  type: object
-                source:
-                  type: string
-                src_version:
-                  type: object
-                stats:
-                  type: object
-                taxonomy:
-                  type: object
-                timestamp:
-                  type: string
+            properties:
+              app_revision:
+                type: string
+              available_fields:
+                type: string
+              genome_assembly:
+                type: object
+                properties:
+                  human:
+                    type: string
+                  mouse:
+                    type: string
+                  nematode:
+                    type: string
+                  fruitfly:
+                    type: string
+                  frog:
+                    type: string
+                  zebrafish:
+                    type: string
+                  pig:
+                    type: string
+                  rat:
+                    type: string
+              source:
+                type: string
+              src_version:
+                type: object
+                properties:
+                  ucsc:
+                    type: integer
+                  netaffy:
+                    type: string
+                  cpdb:
+                    type: integer
+                  ensembl:
+                    type: integer
+                  entrez:
+                    type: integer
+                  pharmgkb:
+                    type: integer
+                  uniprot:
+                    type: integer
+                  refseq:
+                    type: integer
+              stats:
+                type: object
+                properties:
+                  total_entrez_genes:
+                    type: integer
+                  total_ensembl_genes_mapped_to_entrez:
+                    type: integer
+                  total_ensembl_only_genes:
+                    type: integer
+                  total_genes:
+                    type: integer
+                  total_ensembl_genes:
+                    type: integer
+                  total_species:
+                    type: integer
+              taxonomy:
+                type: object
+                properties:
+                  human: 
+                    type: integer
+                  thale-cress": 
+                    type: integer
+                  mouse:
+                    type: integer
+                  nematode: 
+                    type: integer
+                  fruitfly: 
+                    type: integer
+                  frog:
+                    type: integer
+                  zebrafish: 
+                    type: integer
+                  pig: 
+                    type: integer
+                  rat: 
+                    type: integer
+              timestamp:
+                type: string
